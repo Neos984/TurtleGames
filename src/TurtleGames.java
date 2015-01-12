@@ -2,6 +2,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.awt.event.MouseEvent;
+import java.applet.Applet;
+import java.applet.AudioClip;
+import java.net.URL;
 
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
@@ -9,6 +12,7 @@ import acm.graphics.GObject;
 import acm.graphics.GRect;
 import acm.graphics.GTurtle;
 import acm.program.GraphicsProgram;
+import acm.util.MediaTools;
 import acm.util.RandomGenerator;
 
 
@@ -22,6 +26,10 @@ public class TurtleGames extends GraphicsProgram
 	public static final int APPLICATION_WIDTH = 1000;
 	public static final int APPLICATION_HEIGHT = 1000;
 	
+	public static final AudioClip muzak = Applet.newAudioClip(TurtleGames.class.getResource("Mining by Moonlight.mp3"));
+	public static final AudioClip chomp = Applet.newAudioClip(TurtleGames.class.getResource("Chomp.wav"));
+	public static final AudioClip error = Applet.newAudioClip(TurtleGames.class.getResource("Error.wav"));
+	
 	/** Dimensions of the select */
 	private static final int selectWidth = 10;
 	private static final int selectHeight = 10;
@@ -32,6 +40,14 @@ public class TurtleGames extends GraphicsProgram
 	private static final int rektWidth = 100;
 	private static final int rektHeight = 100;
 
+	private static final int cardWidth = 150;
+	private static final int cardHeight = 150;
+	
+	private static final int cardSep = 50;
+	
+	private static final int numCardRows = 4;
+	private static final int numCardsColumns = 5;
+	
 	/** Offset of the select up from the bottom */
 	private static final int selectYOffset = 30;
 
@@ -80,6 +96,7 @@ public class TurtleGames extends GraphicsProgram
 	private GLabel mainMenu;
 	private GLabel next;
 	private GLabel back;
+	private GLabel paused;
 	
 	
 	private GLabel oNum;
@@ -190,7 +207,41 @@ public class TurtleGames extends GraphicsProgram
 	private GRect rekt1;
 	private GRect rekt2;
 	private GRect rekt3;
+	private GRect stem;
+	private GRect leaf1;
+	private GRect leaf2;
+	private GRect leaf3;
+	private GRect leaf4;
+	private GRect leafcover;
+	private GRect leafcover2;
+	private GRect ground;
 	private GRect basket;
+	
+	private GRect turtlecover;
+	private GRect redword;
+	private GRect redcolor;
+	private GRect orangeword;
+	private GRect orangecolor;
+	private GRect yellowword;
+	private GRect yellowcolor;
+	private GRect greenword;
+	private GRect greencolor;
+	private GRect blueword;
+	private GRect bluecolor;
+	private GRect indigoword;
+	private GRect indigocolor;
+	private GRect purpleword;
+	private GRect purplecolor;
+	private GRect pinkword;
+	private GRect pinkcolor;
+	private GRect brownword;
+	private GRect browncolor;
+	private GRect grayword;
+	private GRect graycolor;
+	private GRect blackword;
+	private GRect blackcolor;
+	private GRect whiteword;
+	private GRect whitecolor;
 	
 	private GRect aRectangle;
 	private GRect bRectangle;
@@ -215,6 +266,15 @@ public class TurtleGames extends GraphicsProgram
 	private boolean rekt1gone = false;
 	private boolean rekt2gone = false;
 	private boolean rekt3gone = false;
+	private boolean redUsed = false;
+	private boolean orangeUsed = false;
+	private boolean yellowUsed = false;
+	private boolean greenUsed = false;
+	private boolean blueUsed = false;
+	private boolean inidgoUsed = false;
+	private boolean purpleUsed = false;
+	private boolean brownUsed = false;
+	private boolean pinkUsed = false;
 	private boolean isLoser = false;
 	
 	private boolean meter100 = false;
@@ -263,7 +323,6 @@ public class TurtleGames extends GraphicsProgram
 	
 	/** Generates Colors or Numbers*/ 
 	private RandomGenerator rgen = RandomGenerator.getInstance();
-	
 	private int nextInt = rgen.nextInt(1, 3);
 	private int nextSpawn1 = rgen.nextInt(1, 9);
 	private int nextSpawn2 = rgen.nextInt(1, 9);
@@ -272,12 +331,12 @@ public class TurtleGames extends GraphicsProgram
 	private int rekt2Spawn = nextSpawn2 * 100;
 	private int rekt3Spawn = nextSpawn3 * 100;
 	private int nextColor1 = rgen.nextInt(1, 9);
-	private int nextColor2 = rgen.nextInt(1, 9);
 	private int rectSpeed1 = 0;
 	private int rectSpeed2 = 0;
 	private int rectSpeed3 = 0;
 	
 	ArrayList<GRect> rekt = new ArrayList<GRect>();
+	ArrayList<GRect> card = new ArrayList<GRect>();
 	ArrayList<GLabel> words = new ArrayList<GLabel>();
 	
 	RandomGenerator rg = new RandomGenerator();
@@ -288,10 +347,15 @@ public class TurtleGames extends GraphicsProgram
 	Color h = new Color(0,0,255);
 	Color ocean = new Color(9,130,210);
 	
+	Color Leaf = new Color(50,255,0);
+	Color Ground = new Color(100,255,0);
+	
 	Color Indigo = new Color(75,0,130);
 	Color Purple = new Color(255,0,255);
 	Color Pink = new Color(255,20,147);
 	Color Brown = new Color(188,143,143);
+	
+	Color Stem = new Color(160,100,100);
 	
 	Color Lane1 = new Color(180,0,0);
 	Color Lane2 = new Color(130, 148, 53);
@@ -312,7 +376,6 @@ public class TurtleGames extends GraphicsProgram
 	public void run()
 	{
 		addMouseListeners();
-		
 		
 		if(toddlershowcase)
 		{
@@ -348,6 +411,10 @@ public class TurtleGames extends GraphicsProgram
 		mainMenu = new GLabel("Main Menu", 700, 850);
 		mainMenu.setFont(Font35);
 		mainMenu.setColor(Color.white);
+		
+		paused = new GLabel("Paused", 450, 500);
+		paused.setFont(Font35);
+		paused.setColor(Color.black);
 		
 		oButt = new GRect(75,700,250,250);
 		oButt.setFilled(true);
@@ -656,6 +723,9 @@ public class TurtleGames extends GraphicsProgram
 		lapCount.setFont(Font35);
 		lapCount.setColor(Color.white);
 		
+		paused = new GLabel("Paused", 450, 500);
+		paused.setFont(Font35);
+		
 		loser = new GLabel("You Lose :(", 400, 500);
 		loser.setFont(Font35);
 		loser.setColor(Color.white);
@@ -704,7 +774,7 @@ public class TurtleGames extends GraphicsProgram
 		play.setFont(Font35);
 		play.setColor(Color.white);
 		
-		basket = new GRect(basketWidth, 1000 - basketHeight, basketWidth, basketHeight);
+		basket = new GRect(basketWidth, 1000 - basketHeight - basketYOffset, basketWidth, basketHeight);
 		basket.setFilled(true);
 		
 		addSelect();
@@ -786,6 +856,11 @@ public class TurtleGames extends GraphicsProgram
 			}
 		}
 		
+	}
+	
+	private void turtlematch()
+	{
+		//word = new GLabel(redword.getX() + 10, redword.getY() / 2);
 	}
 	
 	private void turtlerace()
@@ -1432,6 +1507,10 @@ public class TurtleGames extends GraphicsProgram
 			add(scoreCount);
 			add(livesCount);
 			
+			rectSpeed1 = rgen.nextInt(3, 9);
+			rectSpeed2 = rgen.nextInt(3, 9);
+			rectSpeed3 = rgen.nextInt(3, 9);
+			
 			if(score == 10)
 			{
 				removeAll();
@@ -1442,6 +1521,8 @@ public class TurtleGames extends GraphicsProgram
 				{
 					removeAll();
 					addNewRekts();
+					countdown();
+					dropdown2();
 				}
 				ending();
 			}
@@ -1450,36 +1531,19 @@ public class TurtleGames extends GraphicsProgram
 				rekt1gone = false;
 				rekt2gone = false;
 				rekt3gone = false;
+				removeAll();
 				addNewRekts();
 				dropdown();
 			}
-			if(rekt1gone == false)
-			{
+			
 				rekt1.move(0, rv * rectSpeed1);
-				
-			}
-			if(rekt2gone == false)
-			{
+			
 				rekt2.move(0, rv * rectSpeed2);
 				
-			}
-			if(rekt3gone == false)
-			{
 				rekt3.move(0, rv * rectSpeed3);
 				
-			}
 			
-			rekt1.getY();
-			rekt2.getY();
-			rekt3.getY();
-			basket.getX();
-			
-			System.out.println("Basket X : " + basket.getX());
-			System.out.println("Basket Y : " + basket.getY());
-			System.out.println("Rekt 1 Y : " + rekt1.getY());
-			System.out.println("Rekt 2 Y : " + rekt2.getY());
-			System.out.println("Rekt 3 Y : " + rekt3.getY());
-			pause(20);
+			pause(15);
 			
 			if(rekt1.getX() <= basket.getX() + 150 && rekt1.getX() >= basket.getX() - 99 && rekt1.getY() >= 800 && rekt1.getY() <= 1050)
 			{
@@ -1487,6 +1551,7 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				System.out.println("Score : " + score);
 				scoreCount.setLabel("Score: " + score);
+				chomp.play();
 				removeAll();
 				addNewRekts();
 				dropdown();
@@ -1497,12 +1562,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
 				remove(uhOh);
-				countdown();
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown();
 			}
 			if(rekt3.getX() <= basket.getX() + 150 && rekt3.getX() >= basket.getX() - 99 && rekt3.getY() >= 800 && rekt3.getY() <= 1050)
@@ -1511,12 +1583,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
 				remove(uhOh);
-				countdown();
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown();
 			}
 			if(rekt1.getY() >= 1000)
@@ -1536,7 +1615,7 @@ public class TurtleGames extends GraphicsProgram
 				remove(rekt3);
 				rekt3gone = true;
 			}
-			remove(scoreCount);
+			scoreCount.setLabel("Score: " + score);
 		}
 	}
 	
@@ -1544,8 +1623,14 @@ public class TurtleGames extends GraphicsProgram
 	{
 		while(searchX)
 		{
+			scoreCount.setLabel("Score: " + score);
 			add(scoreCount);
 			add(livesCount);
+			
+			rectSpeed1 = rgen.nextInt(3, 9);
+			rectSpeed2 = rgen.nextInt(3, 9);
+			rectSpeed3 = rgen.nextInt(3, 9);
+			
 			
 			if(score == 10)
 			{
@@ -1557,12 +1642,12 @@ public class TurtleGames extends GraphicsProgram
 				{
 					removeAll();
 					addNewRekts();
+					countdown();
 					dropdown3();
 				}
 				ending();
 			}
 			
-			setBackground(Color.white);
 			if(rekt1gone == true && rekt2gone == true && rekt3gone == true)
 			{
 				rekt1gone = false;
@@ -1571,36 +1656,17 @@ public class TurtleGames extends GraphicsProgram
 				addNewRekts();
 				dropdown2();
 			}
-			if(rekt1gone == false)
-			{
+			
 				rekt1.move(0, rv * rectSpeed1);
 				word.move(0, rv * rectSpeed1);
-				
-			}
-			if(rekt2gone == false)
-			{
+			
 				rekt2.move(0, rv * rectSpeed2);
 				black.move(0, rv * rectSpeed2);
-				
-			}
-			if(rekt3gone == false)
-			{
+	
 				rekt3.move(0, rv * rectSpeed3);
 				white.move(0, rv * rectSpeed3);
-				
-			}
 			
-			rekt1.getY();
-			rekt2.getY();
-			rekt3.getY();
-			basket.getX();
-			
-			System.out.println("Basket X : " + basket.getX());
-			System.out.println("Basket Y : " + basket.getY());
-			System.out.println("Rekt 1 Y : " + rekt1.getY());
-			System.out.println("Rekt 2 Y : " + rekt2.getY());
-			System.out.println("Rekt 3 Y : " + rekt3.getY());
-			pause(20);
+			pause(15);
 			
 			if(rekt1.getX() <= basket.getX() + 150 && rekt1.getX() >= basket.getX() - 99 && rekt1.getY() >= 800 && rekt1.getY() <= 1050)
 			{
@@ -1608,6 +1674,7 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				scoreCount.setLabel("Score: " + score);
 				System.out.println("Score : " + score);
+				chomp.play();
 				removeAll();
 				addNewRekts();
 				dropdown2();
@@ -1618,12 +1685,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
 				remove(uhOh);
-				countdown();
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown2();
 			}
 			if(rekt3.getX() <= basket.getX() + 150 && rekt3.getX() >= basket.getX() - 99 && rekt3.getY() >= 800 && rekt3.getY() <= 1050)
@@ -1632,12 +1706,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
 				remove(uhOh);
-				countdown();
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown2();
 			}
 			if(rekt1.getY() >= 1000)
@@ -1668,8 +1749,14 @@ public class TurtleGames extends GraphicsProgram
 	{
 		while(searchX)
 		{
+			scoreCount.setLabel("Score: " + score);
 			add(scoreCount);
 			add(livesCount);
+			
+			rectSpeed1 = rgen.nextInt(3, 9);
+			rectSpeed2 = rgen.nextInt(3, 9);
+			rectSpeed3 = rgen.nextInt(3, 9);
+			
 			
 			if(score == 10)
 			{
@@ -1677,18 +1764,14 @@ public class TurtleGames extends GraphicsProgram
 				score = 0;
 				if(toddlershowcase)
 				{
+					removeAll();
 					turtledrop();
 				}
 				removeAll();
 				ending();
 				
 			}
-			if(lives == 0)
-			{
-				ending();
-			}
 			
-			setBackground(Color.white);
 			if(rekt1gone == true && rekt2gone == true && rekt3gone == true)
 			{
 				rekt1gone = false;
@@ -1703,13 +1786,7 @@ public class TurtleGames extends GraphicsProgram
 				white2.move(0, rv * rectSpeed3);
 		
 			
-			pause(20);
-			
-			System.out.println("Basket X : " + basket.getX());
-			System.out.println("Basket Y : " + basket.getY());
-			System.out.println("Color Word Y : " + word.getY());
-			System.out.println("Black Y : " + rekt2.getY());
-			System.out.println("White Y : " + rekt3.getY());
+			pause(15);
 			
 			if(word.getX() <= basket.getX() + 150 && word.getX() >= basket.getX() - 99 && word.getY() >= 800 && word.getY() <= 1050)
 			{
@@ -1717,6 +1794,7 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				scoreCount.setLabel("Score: " + score);
 				System.out.println("Score : " + score);
+				chomp.play();
 				removeAll();
 				addNewRekts();
 				dropdown3();
@@ -1727,12 +1805,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
-				remove(uhOh);
-				countdown();				
+				remove(uhOh);				
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown3();
 			}
 			if(white.getX() <= basket.getX() + 150 && white.getX() >= basket.getX() - 99 && white.getY() >= 800 && white.getY() <= 1050)
@@ -1741,12 +1826,19 @@ public class TurtleGames extends GraphicsProgram
 				lives -= 1;
 				livesCount.setLabel("Lives: " + lives);
 				System.out.println("Lives : " + lives);
+				error.play();
+				if(lives == 0)
+				{
+					score = 0;
+					lives = 3;
+					turtledrop();
+				}
 				add(uhOh);
 				pause(2000);
 				remove(uhOh);
-				countdown();
 				removeAll();
 				addNewRekts();
+				countdown();
 				dropdown3();
 			}
 			if(word.getY() >= 1200)
@@ -1774,200 +1866,51 @@ public class TurtleGames extends GraphicsProgram
 	
 	private void addNewRekts()
 	{
-		setBackground(Color.white);
-		
-		rekt1 = new GRect(nextSpawn1 * 100, 0, rektWidth, rektHeight);
-		rekt1.setFilled(true);
-		
-		rekt2 = new GRect(nextSpawn2 * 100, 0, rektWidth, rektHeight);
-		rekt2.setFilled(true);
-		rekt2.setFillColor(Color.black);
-		
-		rekt3 = new GRect(nextSpawn3 * 100, 0, rektWidth, rektHeight);
-		rekt3.setFilled(true);
-		rekt3.setFillColor(Color.white);
-		
-
-		black = new GLabel("BLACK", rekt2Spawn, rektWidth / 2);
-		black.setFont(Font30);
-		black.setColor(Color.white);
-		
-		white = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
-		white.setFont(Font30);
-		
-		white2 = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
-		white2.setFont(Font31);
-		
-		word = new GLabel("", rekt1Spawn, rektWidth / 2);
-		word.setFont(Font25);
-		word.setColor(Color.white);
+		setBackground(Lane2);
 		
 		removeAll();
+		
+		addBackground();
 		
 		rekt1gone = false;
 		rekt2gone = false;
 		rekt3gone = false;
 		
-		rectSpeed1 = rgen.nextInt(5, 9);
-		rectSpeed2 = rgen.nextInt(5, 9);
-		rectSpeed3 = rgen.nextInt(5, 9);
-		
 		nextSpawn1 = rgen.nextInt(1, 9);
 		
+		rekt1Spawn = nextSpawn1 * 100;
+		
 		System.out.println("Next Spawn 1 : " + nextSpawn1);
+		rekt1 = new GRect(nextSpawn1 * 100, 0, rektWidth, rektHeight);
+		rekt1.setFilled(true);
+		
+		word = new GLabel("", rekt1Spawn, rektWidth / 2);
+		word.setFont(Font25);
+		word.setColor(Color.white);
 		if(level1 || level2)
 		{
 			add(rekt1);	
 		}
 		rekt1.setFilled(true);
-		nextColor1 = rgen.nextInt(1, 9);
-		rekt1Spawn = nextSpawn1 * 100;
-		if(nextColor1 == 1)
-		{
-			rekt1.setFillColor(o);
-			basket.setFillColor(o);
-			if(level2 || level3)
-			{
-				word.setLabel("RED");
-				if(level3)
-				{
-					word.setColor(Color.red);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 2)
-		{
-			rekt1.setFillColor(Color.orange);
-			basket.setFillColor(Color.orange);
-			if(level2 || level3)
-			{
-				word.setLabel("ORANGE");
-				word.setColor(Color.black);
-				if(level3)
-				{
-					word.setColor(Color.orange);
-				}
-				word.setFont(Font20);
-				add(word);
-			}
-		}
-		if(nextColor1 == 3)
-		{
-			rekt1.setFillColor(Color.yellow);
-			basket.setFillColor(Color.yellow);
-			if(level2 || level3)
-			{
-				word.setLabel("YELLOW");
-				word.setColor(Color.black);
-				if(level3)
-				{
-					word.setColor(Color.yellow);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 4)
-		{
-			rekt1.setFillColor(a);
-			basket.setFillColor(a);
-			if(level2 || level3)
-			{
-				word.setLabel("GREEN");
-				word.setColor(Color.black);
-				if(level3)
-				{
-					word.setColor(a);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 5)
-		{
-			rekt1.setFillColor(h);
-			basket.setFillColor(h);
-			if(level2 || level3)
-			{
-				word.setLabel("BLUE");
-				if(level3)
-				{
-					word.setColor(h);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 6)
-		{
-			rekt1.setFillColor(Indigo);
-			basket.setFillColor(Indigo);
-			if(level2 || level3)
-			{
-				word.setLabel("INDIGO");
-				if(level3)
-				{
-					word.setColor(Indigo);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 7)
-		{
-			rekt1.setFillColor(Purple);
-			basket.setFillColor(Purple);
-			if(level2 || level3)
-			{
-				word.setLabel("PURPLE");
-				if(level3)
-				{
-					word.setColor(Purple);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 8)
-		{
-			rekt1.setFillColor(Brown);
-			basket.setFillColor(Brown);
-			if(level2 || level3)
-			{
-				word.setLabel("BROWN");
-				if(level3)
-				{
-					word.setColor(Brown);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
-		if(nextColor1 == 9)
-		{
-			rekt1.setFillColor(Pink);
-			basket.setFillColor(Pink);
-			if(level2 || level3)
-			{
-				word.setLabel("PINK");
-				if(level3)
-				{
-					word.setColor(Pink);
-				}
-				word.setFont(Font25);
-				add(word);
-			}
-		}
+		
+		nextColor();
 		
 		nextSpawn2 = rgen.nextInt(1, 9);
 		while(nextSpawn2 == nextSpawn1 - 1 ||nextSpawn2 == nextSpawn1 + 1 || nextSpawn2 == nextSpawn1)
 		{
 			nextSpawn2 = rgen.nextInt(1, 9);
 		}
+		rekt2 = new GRect(nextSpawn2 * 100, 0, rektWidth, rektHeight);
+		rekt2.setFilled(true);
+		rekt2.setFillColor(Color.black);
+	
 		System.out.println("Next Spawn 2 : " + nextSpawn2);
 		rekt2Spawn = nextSpawn2 * 100;
+		
+		black = new GLabel("BLACK", rekt2Spawn, rektWidth / 2);
+		black.setFont(Font30);
+		black.setColor(Color.white);
+		
 		if(level1 || level2)
 		{
 			add(rekt2);	
@@ -1985,9 +1928,19 @@ public class TurtleGames extends GraphicsProgram
 		while(nextSpawn3 == nextSpawn1 + 1 || nextSpawn3 == nextSpawn2 + 1 || nextSpawn3 == nextSpawn1 || nextSpawn3 == nextSpawn2 || nextSpawn3 == nextSpawn1 - 1 || nextSpawn3 == nextSpawn2 - 1)
 		{
 			nextSpawn3 = rgen.nextInt(1, 9);
-		}		
+		}
+		rekt3 = new GRect(nextSpawn3 * 100, 0, rektWidth, rektHeight);
+		rekt3.setFilled(true);
+		rekt3.setFillColor(Color.white);
 		System.out.println("Next Spawn 3 : " + nextSpawn3);
 		rekt3Spawn = nextSpawn3 * 100;
+		
+		white = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
+		white.setFont(Font30);
+		
+		white2 = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
+		white2.setFont(Font31);
+		
 		if(level1 || level2)
 		{
 			add(rekt3);	
@@ -2024,7 +1977,6 @@ public class TurtleGames extends GraphicsProgram
 		
 		while(searchX)
 		{
-			
 			waitForClick();
 			if(select.getX() >= 75 && select.getX() <= 325)
 			{
@@ -2050,6 +2002,14 @@ public class TurtleGames extends GraphicsProgram
 				mainmenu();
 			}
 		}
+	}
+	
+	private void addCards()
+	{
+		//nextCard = nextInt(1,24);
+		
+		word = new GLabel("", redword.getX() + 10, redword.getY() / 2);
+
 	}
 	
  	private void warmUp()
@@ -2570,6 +2530,225 @@ public class TurtleGames extends GraphicsProgram
 		remove(countdown1);
 	}
 	
+	private void pause()
+	{
+		add(paused);
+		waitForClick();
+		countdown();
+	}
+	
+	private void addBackground()
+	{
+		stem = new GRect(475, -1000, 50, 2000);
+		stem.setFilled(true);
+		stem.setFillColor(Stem);
+		
+		leaf1 = new GRect(-20, -50, 50, 200);
+		leaf1.setFilled(true);
+		leaf1.setFillColor(Leaf);
+		
+		leaf3 = new GRect(970, -50, 50, 200);
+		leaf3.setFilled(true);
+		leaf3.setFillColor(Leaf);
+		
+		leaf2 = new GRect(30, -50, 50, 100);
+		leaf2.setFilled(true);
+		leaf2.setFillColor(Leaf);
+		
+		leaf4 = new GRect(0, 0, 1000, 25);
+		leaf4.setFilled(true);
+		leaf4.setFillColor(Leaf);
+		
+		leafcover = new GRect(0, 0, 50, 49);
+		leafcover.setFilled(true);
+		leafcover.setColor(Leaf);
+		
+		leafcover2 = new GRect(0, 0, 1000, 24);
+		leafcover2.setFilled(true);
+		leafcover2.setColor(Leaf);
+		
+		ground = new GRect(-2000, 950, 4000, 4000);
+		ground.setFilled(true);
+		ground.setFillColor(Ground);
+		
+		add(stem);
+		add(leaf4);
+		add(leaf1);
+		add(leaf3);
+		add(leaf2);
+		add(leafcover);
+		add(leafcover2);
+		add(ground);
+	}
+	
+	private void nextColor()
+	{
+		nextColor1 = rgen.nextInt(1, 10);
+		if(nextColor1 == 1)
+		{
+			rekt1.setFillColor(o);
+			basket.setFillColor(o);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("RED");
+				if(level3)
+				{
+					word.setColor(Color.red);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 2)
+		{
+			rekt1.setFillColor(Color.orange);
+			basket.setFillColor(Color.orange);
+			if(level2 || level3)
+			{
+				word.setFont(Font20);
+				word.setLabel("ORANGE");
+				word.setColor(Color.black);
+				if(level3)
+				{
+					word.setColor(Color.orange);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 3)
+		{
+			rekt1.setFillColor(Color.yellow);
+			basket.setFillColor(Color.yellow);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("YELLOW");
+				word.setColor(Color.black);
+				if(level3)
+				{
+					word.setColor(Color.yellow);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 4)
+		{
+			rekt1.setFillColor(a);
+			basket.setFillColor(a);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("GREEN");
+				word.setColor(Color.black);
+				if(level3)
+				{
+					word.setColor(a);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 5)
+		{
+			rekt1.setFillColor(h);
+			basket.setFillColor(h);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("BLUE");
+				if(level3)
+				{
+					word.setColor(h);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 6)
+		{
+			rekt1.setFillColor(Indigo);
+			basket.setFillColor(Indigo);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("INDIGO");
+				if(level3)
+				{
+					word.setColor(Indigo);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 7)
+		{
+			rekt1.setFillColor(Purple);
+			basket.setFillColor(Purple);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("PURPLE");
+				if(level3)
+				{
+					word.setColor(Purple);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 8)
+		{
+			rekt1.setFillColor(Brown);
+			basket.setFillColor(Brown);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("BROWN");
+				if(level3)
+				{
+					word.setColor(Brown);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 9)
+		{
+			rekt1.setFillColor(Pink);
+			basket.setFillColor(Pink);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("PINK");
+				if(level3)
+				{
+					word.setColor(Pink);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+		if(nextColor1 == 10)
+		{
+			rekt1.setFillColor(Color.gray);
+			basket.setFillColor(Color.gray);
+			if(level2 || level3)
+			{
+				word.setFont(Font25);
+				word.setLabel("GRAY");
+				if(level3)
+				{
+					word.setColor(Color.gray);
+					word.setFont(Font30);
+				}
+				add(word);
+			}
+		}
+	}
+	
 	private void addSelect()
 	{
 		select = new GRect(getWidth() / 2 - selectWidth / 2,
@@ -2595,7 +2774,7 @@ public class TurtleGames extends GraphicsProgram
 		{
 			if(x > basketWidth / 2 && x < getWidth() - basketWidth / 2)
 			{
-				basket.setLocation(x - basketWidth / 2, 1000 - basketHeight);
+				basket.setLocation(x - basketWidth / 2, 1000 - basketHeight - basketYOffset);
 			}
 		}
 
