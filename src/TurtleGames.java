@@ -259,7 +259,7 @@ public class TurtleGames extends GraphicsProgram
 	private final boolean searchX = true;
 	private boolean Practice = false;
 	
-	private boolean toddlershowcase = true;
+	private boolean toddlershowcase = false;
 	private boolean level1 = false;
 	private boolean level2 = false;
 	private boolean level3 = false;
@@ -1507,9 +1507,6 @@ public class TurtleGames extends GraphicsProgram
 			add(scoreCount);
 			add(livesCount);
 			
-			rectSpeed1 = rgen.nextInt(3, 9);
-			rectSpeed2 = rgen.nextInt(3, 9);
-			rectSpeed3 = rgen.nextInt(3, 9);
 			
 			if(score == 10)
 			{
@@ -1626,10 +1623,6 @@ public class TurtleGames extends GraphicsProgram
 			scoreCount.setLabel("Score: " + score);
 			add(scoreCount);
 			add(livesCount);
-			
-			rectSpeed1 = rgen.nextInt(3, 9);
-			rectSpeed2 = rgen.nextInt(3, 9);
-			rectSpeed3 = rgen.nextInt(3, 9);
 			
 			
 			if(score == 10)
@@ -1753,9 +1746,6 @@ public class TurtleGames extends GraphicsProgram
 			add(scoreCount);
 			add(livesCount);
 			
-			rectSpeed1 = rgen.nextInt(3, 9);
-			rectSpeed2 = rgen.nextInt(3, 9);
-			rectSpeed3 = rgen.nextInt(3, 9);
 			
 			
 			if(score == 10)
@@ -1876,6 +1866,10 @@ public class TurtleGames extends GraphicsProgram
 		rekt2gone = false;
 		rekt3gone = false;
 		
+		rectSpeed1 = rgen.nextInt(3, 9);
+		rectSpeed2 = rgen.nextInt(3, 9);
+		rectSpeed3 = rgen.nextInt(3, 9);
+		
 		nextSpawn1 = rgen.nextInt(1, 9);
 		
 		rekt1Spawn = nextSpawn1 * 100;
@@ -1950,7 +1944,6 @@ public class TurtleGames extends GraphicsProgram
 			if(level3)
 			{
 				white.setColor(Color.white);
-				add(white2);
 			}
 			add(white);	
 		}
