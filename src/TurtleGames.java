@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.applet.Applet;
 import java.applet.AudioClip;
-import java.net.URL;
 
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
-import acm.graphics.GObject;
 import acm.graphics.GRect;
 import acm.graphics.GTurtle;
 import acm.program.GraphicsProgram;
-import acm.util.MediaTools;
 import acm.util.RandomGenerator;
 
 
@@ -22,17 +19,28 @@ public class TurtleGames extends GraphicsProgram
 	/**
 	 * 
 	 */
-	public static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 3L;
 	public static final int APPLICATION_WIDTH = 1000;
 	public static final int APPLICATION_HEIGHT = 1000;
 	
 	public static final AudioClip muzak = Applet.newAudioClip(TurtleGames.class.getResource("Mining by Moonlight.mp3"));
-	public static final AudioClip chomp = Applet.newAudioClip(TurtleGames.class.getResource("Chomp.wav"));
-	public static final AudioClip error = Applet.newAudioClip(TurtleGames.class.getResource("Error.wav"));
+	public static final AudioClip error = Applet.newAudioClip(TurtleGames.class.getResource("UhOh.wav"));
+	public static final AudioClip red = Applet.newAudioClip(TurtleGames.class.getResource("Red.wav"));
+	public static final AudioClip orange = Applet.newAudioClip(TurtleGames.class.getResource("Orange.wav"));
+	public static final AudioClip yellow = Applet.newAudioClip(TurtleGames.class.getResource("Yellow.wav"));
+	public static final AudioClip green = Applet.newAudioClip(TurtleGames.class.getResource("Green.wav"));
+	public static final AudioClip blue = Applet.newAudioClip(TurtleGames.class.getResource("Blue.wav"));
+	public static final AudioClip purple = Applet.newAudioClip(TurtleGames.class.getResource("Purple.wav"));
+	public static final AudioClip pink = Applet.newAudioClip(TurtleGames.class.getResource("Pink.wav"));
+	public static final AudioClip brown = Applet.newAudioClip(TurtleGames.class.getResource("Brown.wav"));
+	public static final AudioClip gray = Applet.newAudioClip(TurtleGames.class.getResource("Grey.wav"));
+	public static final AudioClip gameOgre = Applet.newAudioClip(TurtleGames.class.getResource("Game Over.wav"));
+	
+	
 	
 	/** Dimensions of the select */
-	private static final int selectWidth = 10;
-	private static final int selectHeight = 10;
+	private static final int selectWidth = 1;
+	private static final int selectHeight = 1;
 	
 	private static final int basketWidth = 150;
 	private static final int basketHeight = 150;
@@ -40,14 +48,6 @@ public class TurtleGames extends GraphicsProgram
 	private static final int rektWidth = 100;
 	private static final int rektHeight = 100;
 
-	private static final int cardWidth = 150;
-	private static final int cardHeight = 150;
-	
-	private static final int cardSep = 50;
-	
-	private static final int numCardRows = 4;
-	private static final int numCardsColumns = 5;
-	
 	/** Offset of the select up from the bottom */
 	private static final int selectYOffset = 30;
 
@@ -76,17 +76,8 @@ public class TurtleGames extends GraphicsProgram
 	private int hLapCount = 0;
 	
 	private final int rv = 1;
+	private final int ts = 1;
 	private int lives = 3;
-	private int timesdropped = 0;
-	
-	private double rand1 = Math.random()*100;
-	private double rand2 = Math.random()*100;
-	private double rand3 = Math.random()*100;
-	private double rand4 = Math.random()*100;
-	private double rand5 = Math.random()*100;
-	private double rand6 = Math.random()*100;
-	private double rand7 = Math.random()*100;
-	private double rand8 = Math.random()*100;
 	
 	private GLabel drop;
 	private GLabel tRace;
@@ -130,21 +121,10 @@ public class TurtleGames extends GraphicsProgram
 	private GLabel livesCount;
 	private GLabel loser;
 	private GLabel tdrop;
-	private GLabel Continue;
 	private GLabel Level1;
 	private GLabel Level2;
 	private GLabel Level3;
 	private GLabel uhOh;
-	private GLabel nextLevel;
-	private GLabel red;
-	private GLabel orange;
-	private GLabel yellow;
-	private GLabel green;
-	private GLabel blue;
-	private GLabel purple;
-	private GLabel indigo;
-	private GLabel pink;
-	private GLabel brown;
 	private GLabel black;
 	private GLabel white;
 	private GLabel countdown1;
@@ -193,11 +173,6 @@ public class TurtleGames extends GraphicsProgram
 	private GLine hypotenuse4;
 	private GLine hypotenuse5;
 	
-	private GRect gameButton1;
-	private GRect gameButton2;
-	private GRect gameButton3;
-	private GRect gameButton4;
-	
 	private GRect select;
 	private GRect oButt;
 	private GRect aButt;
@@ -217,32 +192,6 @@ public class TurtleGames extends GraphicsProgram
 	private GRect ground;
 	private GRect basket;
 	
-	private GRect turtlecover;
-	private GRect redword;
-	private GRect redcolor;
-	private GRect orangeword;
-	private GRect orangecolor;
-	private GRect yellowword;
-	private GRect yellowcolor;
-	private GRect greenword;
-	private GRect greencolor;
-	private GRect blueword;
-	private GRect bluecolor;
-	private GRect indigoword;
-	private GRect indigocolor;
-	private GRect purpleword;
-	private GRect purplecolor;
-	private GRect pinkword;
-	private GRect pinkcolor;
-	private GRect brownword;
-	private GRect browncolor;
-	private GRect grayword;
-	private GRect graycolor;
-	private GRect blackword;
-	private GRect blackcolor;
-	private GRect whiteword;
-	private GRect whitecolor;
-	
 	private GRect aRectangle;
 	private GRect bRectangle;
 	private GRect cRectangle;
@@ -254,28 +203,28 @@ public class TurtleGames extends GraphicsProgram
 	private GRect finishLine;
 	
 	private boolean scoredPoint = false;
-	private boolean firstTime = true;
 	private final boolean numNotGen = true;
 	private final boolean searchX = true;
 	private boolean Practice = false;
 	
-	private boolean toddlershowcase = false;
+	private boolean toddlershowcase = true;
 	private boolean level1 = false;
 	private boolean level2 = false;
 	private boolean level3 = false;
+	private boolean level4 = false;
 	private boolean rekt1gone = false;
 	private boolean rekt2gone = false;
 	private boolean rekt3gone = false;
-	private boolean redUsed = false;
-	private boolean orangeUsed = false;
-	private boolean yellowUsed = false;
-	private boolean greenUsed = false;
-	private boolean blueUsed = false;
-	private boolean inidgoUsed = false;
-	private boolean purpleUsed = false;
-	private boolean brownUsed = false;
-	private boolean pinkUsed = false;
 	private boolean isLoser = false;
+	private boolean redGen = false;
+	private boolean orangeGen = false;
+	private boolean yellowGen = false;
+	private boolean greenGen = false;
+	private boolean blueGen = false;
+	private boolean purpleGen = false;
+	private boolean brownGen = false;
+	private boolean grayGen = false;
+	private boolean pinkGen = false;
 	
 	private boolean meter100 = false;
 	private boolean meter200 = false;
@@ -334,11 +283,15 @@ public class TurtleGames extends GraphicsProgram
 	private int rectSpeed1 = 0;
 	private int rectSpeed2 = 0;
 	private int rectSpeed3 = 0;
-	
-	ArrayList<GRect> rekt = new ArrayList<GRect>();
-	ArrayList<GRect> card = new ArrayList<GRect>();
-	ArrayList<GLabel> words = new ArrayList<GLabel>();
-	
+	private int turtleSpeed1 = rgen.nextInt(1, 9);
+	private int turtleSpeed2 = rgen.nextInt(1, 9);
+	private int turtleSpeed3 = rgen.nextInt(1, 9);
+	private int turtleSpeed4 = rgen.nextInt(1, 9);
+	private int turtleSpeed5 = rgen.nextInt(1, 9);
+	private int turtleSpeed6 = rgen.nextInt(1, 9);
+	private int turtleSpeed7 = rgen.nextInt(1, 9);
+	private int turtleSpeed8 = rgen.nextInt(1, 9);
+
 	RandomGenerator rg = new RandomGenerator();
 	/** Randomly Generated Color*/
 	Color c = rgen.nextColor();
@@ -349,13 +302,11 @@ public class TurtleGames extends GraphicsProgram
 	
 	Color Leaf = new Color(50,255,0);
 	Color Ground = new Color(100,255,0);
+	Color Stem = new Color(160,100,100);
 	
-	Color Indigo = new Color(75,0,130);
 	Color Purple = new Color(255,0,255);
 	Color Pink = new Color(255,20,147);
-	Color Brown = new Color(188,143,143);
-	
-	Color Stem = new Color(160,100,100);
+	Color Brown = new Color(70,33,33);
 	
 	Color Lane1 = new Color(180,0,0);
 	Color Lane2 = new Color(130, 148, 53);
@@ -404,7 +355,7 @@ public class TurtleGames extends GraphicsProgram
 		tRace.setFont(Font35);
 		tRace.setColor(Color.white);
 		
-		playAgain = new GLabel("Play Again", 150, 850);
+		playAgain = new GLabel("Play Again", 120, 850);
 		playAgain.setFont(Font35);
 		playAgain.setColor(Color.white);
 		
@@ -447,17 +398,18 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				turtlerace();
 			}
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				turtledrop();
 			}
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
+				if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				triggyturtle();
@@ -467,6 +419,7 @@ public class TurtleGames extends GraphicsProgram
 	  
 	private void triggyturtle()
 	{
+		muzak.play();
 		
 		setBackground(Color.black);
 		
@@ -661,16 +614,13 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
-				firstTime = false;
 				removeAll();
-;
 				instructions();
 			}
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
-				firstTime = false;
 				remove(welcome);
 				remove(mrglitch);
 				remove(ins);
@@ -682,22 +632,22 @@ public class TurtleGames extends GraphicsProgram
 				waitForClick();
 				while(searchX)
 				{
-				if(select.getX() >= 75 && select.getX() <= 325)
+				if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 				{
 					setup();
 				}
-				if(select.getX() >= 375 && select.getX() <= 625)
+				if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 				{
 					practice();
 				}
-				if(select.getX() >= 675 && select.getX() <= 925)
+				if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 				{
 					removeAll();
 					triggyturtle();
 				}
 				}
 			}
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				mainmenu();
 			}		
@@ -793,6 +743,13 @@ public class TurtleGames extends GraphicsProgram
 			countdown();
 			dropdown3();
 		}
+		if(level4)
+		{
+			removeAll();
+			addNewRekts();
+			countdown();
+			dropdown3();
+		}
 		if(toddlershowcase)
 		{
 			level1 = true;
@@ -810,7 +767,7 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				add(lapCount);
 				remove(tdrop);
@@ -824,7 +781,7 @@ public class TurtleGames extends GraphicsProgram
 				while(searchX)
 				{
 					waitForClick();
-					if(select.getX() >= 75 && select.getX() <= 325)
+					if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						level1 = true;
 						removeAll();
@@ -832,7 +789,7 @@ public class TurtleGames extends GraphicsProgram
 						countdown();
 						dropdown();
 					}
-					if(select.getX() >= 375 && select.getX() <= 625)
+					if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						level2 = true;
 						removeAll();
@@ -840,7 +797,7 @@ public class TurtleGames extends GraphicsProgram
 						countdown();
 						dropdown2();
 					}
-					if(select.getX() >= 675 && select.getX() <= 925)
+					if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						level3 = true;
 						removeAll();
@@ -850,17 +807,12 @@ public class TurtleGames extends GraphicsProgram
 					}
 				}
 			}
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				mainmenu();
 			}
 		}
 		
-	}
-	
-	private void turtlematch()
-	{
-		//word = new GLabel(redword.getX() + 10, redword.getY() / 2);
 	}
 	
 	private void turtlerace()
@@ -1014,7 +966,7 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				remove(play);
 				remove(mainMenu);
@@ -1027,20 +979,20 @@ public class TurtleGames extends GraphicsProgram
 				while(searchX)
 				{
 					waitForClick();
-					if(select.getX() >= 75 && select.getX() <= 325)
+					if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						removeAll();
 						meter100 = true;
 						warmUp();
 						
 					}
-					if(select.getX() >= 375 && select.getX() <= 625)
+					if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						removeAll();
 						meter200 = true;
 						warmUp();
 					}
-					if(select.getX() >= 675 && select.getX() <= 925)
+					if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 					{
 						removeAll();
 						meter400 = true;
@@ -1048,7 +1000,7 @@ public class TurtleGames extends GraphicsProgram
 					}
 				}
 			}
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				mainmenu();
 			}	
@@ -1057,7 +1009,6 @@ public class TurtleGames extends GraphicsProgram
 			
 	private void instructions()
 	{
-		firstTime = false;
 		add(obj);
 		add(objLine2);
 		waitForClick();
@@ -1118,7 +1069,6 @@ public class TurtleGames extends GraphicsProgram
 	private void practice()
 	{
 		Practice = true;
-		firstTime = false;
 		
 		Onum = new GLabel("Sine (1 then 3)", 475, 600);
 		Onum.setFont(Font20);
@@ -1236,7 +1186,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				System.out.println(select.getX());
 				add(good);
@@ -1265,7 +1215,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				add(good);
 				pause(1000);
@@ -1295,7 +1245,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				System.out.println(select.getX());
 				add(good);
@@ -1324,7 +1274,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				add(good);
 				pause(1000);
@@ -1354,7 +1304,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				System.out.println(select.getX());
 				add(good);
@@ -1383,7 +1333,7 @@ public class TurtleGames extends GraphicsProgram
 			waitForClick();
 			select.getX();
 			System.out.println(select.getX());
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				add(good);
 				pause(1000);
@@ -1502,14 +1452,23 @@ public class TurtleGames extends GraphicsProgram
 	
 	private void dropdown()
 	{
+		
 		while(searchX)
 		{
 			add(scoreCount);
 			add(livesCount);
 			
-			
 			if(score == 10)
 			{
+				redGen = false;
+				orangeGen = false;
+				yellowGen = false;
+				greenGen = false;
+				blueGen = false;
+				purpleGen = false;
+				brownGen = false;
+				grayGen = false;
+				pinkGen = false;
 				removeAll();
 				level1 = false;
 				level2 = true;
@@ -1548,7 +1507,42 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				System.out.println("Score : " + score);
 				scoreCount.setLabel("Score: " + score);
-				chomp.play();
+				if(redGen)
+				{
+					red.play();
+				}
+				if(orangeGen)
+				{
+					orange.play();
+				}
+				if(yellowGen)
+				{
+					yellow.play();
+				}
+				if(greenGen)
+				{
+					green.play();
+				}
+				if(blueGen)
+				{
+					blue.play();
+				}
+				if(purpleGen)
+				{
+					purple.play();
+				}
+				if(brownGen)
+				{
+					brown.play();
+				}
+				if(grayGen)
+				{
+					gray.play();
+				}
+				if(pinkGen)
+				{
+					pink.play();
+				}
 				removeAll();
 				addNewRekts();
 				dropdown();
@@ -1562,6 +1556,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1583,6 +1580,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1627,6 +1627,15 @@ public class TurtleGames extends GraphicsProgram
 			
 			if(score == 10)
 			{
+				redGen = false;
+				orangeGen = false;
+				yellowGen = false;
+				greenGen = false;
+				blueGen = false;
+				purpleGen = false;
+				brownGen = false;
+				grayGen = false;
+				pinkGen = false;
 				removeAll();
 				level2 = false;
 				level3 = true;
@@ -1667,7 +1676,42 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				scoreCount.setLabel("Score: " + score);
 				System.out.println("Score : " + score);
-				chomp.play();
+				if(redGen)
+				{
+					red.play();
+				}
+				if(orangeGen)
+				{
+					orange.play();
+				}
+				if(yellowGen)
+				{
+					yellow.play();
+				}
+				if(greenGen)
+				{
+					green.play();
+				}
+				if(blueGen)
+				{
+					blue.play();
+				}
+				if(purpleGen)
+				{
+					purple.play();
+				}
+				if(brownGen)
+				{
+					brown.play();
+				}
+				if(grayGen)
+				{
+					gray.play();
+				}
+				if(pinkGen)
+				{
+					pink.play();
+				}
 				removeAll();
 				addNewRekts();
 				dropdown2();
@@ -1681,6 +1725,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1702,6 +1749,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1746,16 +1796,32 @@ public class TurtleGames extends GraphicsProgram
 			add(scoreCount);
 			add(livesCount);
 			
-			
-			
 			if(score == 10)
 			{
-				level3 = false;
+				redGen = false;
+				orangeGen = false;
+				yellowGen = false;
+				greenGen = false;
+				blueGen = false;
+				purpleGen = false;
+				brownGen = false;
+				grayGen = false;
+				pinkGen = false;
 				score = 0;
+				if(level4)
+				{
+					level4 = false;
+					level1 = true;
+					turtledrop();
+				}
+				level3 = false;
+				level4 = true;
 				if(toddlershowcase)
 				{
 					removeAll();
-					turtledrop();
+					addNewRekts();
+					countdown();
+					dropdown3();
 				}
 				removeAll();
 				ending();
@@ -1773,7 +1839,6 @@ public class TurtleGames extends GraphicsProgram
 				word.move(0, rv * rectSpeed1);
 				black.move(0, rv * rectSpeed2);
 				white.move(0, rv * rectSpeed3);
-				white2.move(0, rv * rectSpeed3);
 		
 			
 			pause(15);
@@ -1784,7 +1849,42 @@ public class TurtleGames extends GraphicsProgram
 				score += 1;
 				scoreCount.setLabel("Score: " + score);
 				System.out.println("Score : " + score);
-				chomp.play();
+				if(redGen)
+				{
+					red.play();
+				}
+				if(orangeGen)
+				{
+					orange.play();
+				}
+				if(yellowGen)
+				{
+					yellow.play();
+				}
+				if(greenGen)
+				{
+					green.play();
+				}
+				if(blueGen)
+				{
+					blue.play();
+				}
+				if(purpleGen)
+				{
+					purple.play();
+				}
+				if(brownGen)
+				{
+					brown.play();
+				}
+				if(grayGen)
+				{
+					gray.play();
+				}
+				if(pinkGen)
+				{
+					pink.play();
+				}
 				removeAll();
 				addNewRekts();
 				dropdown3();
@@ -1798,6 +1898,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1819,6 +1922,9 @@ public class TurtleGames extends GraphicsProgram
 				error.play();
 				if(lives == 0)
 				{
+					pause(1000);
+					gameOgre.play();
+					pause(3000);
 					score = 0;
 					lives = 3;
 					turtledrop();
@@ -1856,20 +1962,36 @@ public class TurtleGames extends GraphicsProgram
 	
 	private void addNewRekts()
 	{
-		setBackground(Lane2);
 		
 		removeAll();
 		
 		addBackground();
 		
+		redGen = false;
+		orangeGen = false;
+		yellowGen = false;
+		greenGen = false;
+		blueGen = false;
+		purpleGen = false;
+		brownGen = false;
+		grayGen = false;
+		pinkGen = false;
+		
 		rekt1gone = false;
 		rekt2gone = false;
 		rekt3gone = false;
 		
-		rectSpeed1 = rgen.nextInt(3, 9);
-		rectSpeed2 = rgen.nextInt(3, 9);
-		rectSpeed3 = rgen.nextInt(3, 9);
-		
+		rectSpeed1 = rgen.nextInt(3, 5);
+		rectSpeed2 = rgen.nextInt(3, 5);
+		while(rectSpeed2 == rectSpeed1)
+		{
+			rectSpeed2 = rgen.nextInt(3, 5);
+		}
+		rectSpeed3 = rgen.nextInt(3, 5);
+		while(rectSpeed2 == rectSpeed3 || rectSpeed3 == rectSpeed1)
+		{
+			rectSpeed3 = rgen.nextInt(3, 5);
+		}
 		nextSpawn1 = rgen.nextInt(1, 9);
 		
 		rekt1Spawn = nextSpawn1 * 100;
@@ -1903,13 +2025,13 @@ public class TurtleGames extends GraphicsProgram
 		
 		black = new GLabel("BLACK", rekt2Spawn, rektWidth / 2);
 		black.setFont(Font30);
-		black.setColor(Color.white);
 		
 		if(level1 || level2)
 		{
 			add(rekt2);	
+			black.setColor(Color.white);
 		}
-		if(level3 || level2)
+		if(level3 || level2 || level4)
 		{
 			add(black);
 			if(level3)
@@ -1932,14 +2054,11 @@ public class TurtleGames extends GraphicsProgram
 		white = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
 		white.setFont(Font30);
 		
-		white2 = new GLabel("WHITE", rekt3Spawn, rektWidth / 2);
-		white2.setFont(Font31);
-		
 		if(level1 || level2)
 		{
 			add(rekt3);	
 		}
-		if(level3 || level2)
+		if(level3 || level2 || level4)
 		{
 			if(level3)
 			{
@@ -1971,7 +2090,7 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				
 				removeAll();
@@ -1982,7 +2101,7 @@ public class TurtleGames extends GraphicsProgram
 				}
 				turtledrop();
 			}
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				level1 = false;
 				level2 = false;
@@ -1990,24 +2109,40 @@ public class TurtleGames extends GraphicsProgram
 				removeAll();
 				turtledrop();
 			}
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				mainmenu();
 			}
 		}
 	}
 	
-	private void addCards()
-	{
-		//nextCard = nextInt(1,24);
-		
-		word = new GLabel("", redword.getX() + 10, redword.getY() / 2);
-
-	}
-	
  	private void warmUp()
 	{
+ 		turtleSpeed1 = rgen.nextInt(1, 9);
+ 		turtleSpeed2 = rgen.nextInt(1, 9);
+ 		turtleSpeed3 = rgen.nextInt(1, 9);
+ 		turtleSpeed4 = rgen.nextInt(1, 9);
+ 		turtleSpeed5 = rgen.nextInt(1, 9);
+ 		turtleSpeed6 = rgen.nextInt(1, 9);
+ 		turtleSpeed7 = rgen.nextInt(1, 9);
+ 		turtleSpeed8 = rgen.nextInt(1, 9);
+ 		
+ 		aTurtle = new GTurtle(50,50);
 		
+		bTurtle = new GTurtle(50,150);
+		
+		cTurtle = new GTurtle(50,250);
+		
+		dTurtle = new GTurtle(50,350);
+		
+		eTurtle = new GTurtle(50,450);
+		
+		fTurtle = new GTurtle(50,550);
+		
+		gTurtle = new GTurtle(50,650);
+		
+		hTurtle = new GTurtle(50,750);
+ 		
 		add(aRectangle);
 		add(bRectangle);
 		add(cRectangle);
@@ -2052,188 +2187,155 @@ public class TurtleGames extends GraphicsProgram
 	}
 	
 	private void meter100()
-	{
-		
-		rand1 = Math.random()*100;
-		rand2 = Math.random()*100;
-		rand3 = Math.random()*100;
-		rand4 = Math.random()*100;
-		rand5 = Math.random()*100;
-		rand6 = Math.random()*100;
-		rand7 = Math.random()*100;
-		rand8 = Math.random()*100;
-		
-		aTurtle.move(rand1, 0);
-		bTurtle.move(rand2, 0);
-		cTurtle.move(rand3, 0);
-		dTurtle.move(rand4, 0);
-		eTurtle.move(rand5, 0);
-		fTurtle.move(rand6, 0);
-		gTurtle.move(rand7, 0);
-		hTurtle.move(rand8, 0);
-
-		System.out.println("Red Ned:" + aTurtle.getX());
-		System.out.println("Baby Barf:" + bTurtle.getX());
-		System.out.println("Orange:" + cTurtle.getX());
-		System.out.println("Purple Nurple:" + dTurtle.getX());
-		System.out.println("Blue Sue:" + eTurtle.getX());
-		System.out.println("Sandy Randy:" + fTurtle.getX());
-		System.out.println("Mint Jun:" + gTurtle.getX());
-		System.out.println("Random:" + hTurtle.getX());
-		
-		if (aTurtle.getX() >= 950)
+	{	
+		while(searchX)
 		{
-			aScore +=1;
-			resetrace();
+			
+			turtleSpeed1 = rgen.nextInt(1, 9);
+	 		turtleSpeed2 = rgen.nextInt(1, 9);
+	 		turtleSpeed3 = rgen.nextInt(1, 9);
+	 		turtleSpeed4 = rgen.nextInt(1, 9);
+	 		turtleSpeed5 = rgen.nextInt(1, 9);
+	 		turtleSpeed6 = rgen.nextInt(1, 9);
+	 		turtleSpeed7 = rgen.nextInt(1, 9);
+	 		turtleSpeed8 = rgen.nextInt(1, 9);
+			
+			aTurtle.move(ts * turtleSpeed1, 0);
+			bTurtle.move(ts * turtleSpeed2, 0);
+			cTurtle.move(ts * turtleSpeed3, 0);
+			dTurtle.move(ts * turtleSpeed4, 0);
+			eTurtle.move(ts * turtleSpeed5, 0);
+			fTurtle.move(ts * turtleSpeed6, 0);
+			gTurtle.move(ts * turtleSpeed7, 0);
+			hTurtle.move(ts * turtleSpeed8, 0);
+			
+			pause(5);
+	
+			
+			if (aTurtle.getX() >= 950)
+			{
+				aScore +=1;
+				resetrace();
+			}
+			
+			if (bTurtle.getX() >= 950)
+			{
+				bScore +=1;
+				resetrace();
+			}
+			
+			if (cTurtle.getX() >= 950)
+			{
+				cScore +=1;
+				resetrace();
+			}
+			
+			if (dTurtle.getX() >= 950)
+			{
+				dScore +=1;
+				resetrace();
+			}
+			
+			if (eTurtle.getX() >= 950)
+			{
+				eScore +=1;
+				resetrace();
+			}
+			
+			if (fTurtle.getX() >= 950)
+			{
+				fScore +=1;
+				resetrace();
+			}
+			
+			if (gTurtle.getX() >= 950)
+			{
+				gScore +=1;
+				resetrace();
+			}
+			
+			if (hTurtle.getX() >= 950)
+			{
+				hScore +=1;
+				resetrace();
+			}
 		}
-		
-		if (bTurtle.getX() >= 950)
-		{
-			bScore +=1;
-			resetrace();
-		}
-		
-		if (cTurtle.getX() >= 950)
-		{
-			cScore +=1;
-			resetrace();
-		}
-		
-		if (dTurtle.getX() >= 950)
-		{
-			dScore +=1;
-			resetrace();
-		}
-		
-		if (eTurtle.getX() >= 950)
-		{
-			eScore +=1;
-			resetrace();
-		}
-		
-		if (fTurtle.getX() >= 950)
-		{
-			fScore +=1;
-			resetrace();
-		}
-		
-		if (gTurtle.getX() >= 950)
-		{
-			gScore +=1;
-			resetrace();
-		}
-		
-		if (hTurtle.getX() >= 950)
-		{
-			hScore +=1;
-			resetrace();
-		}
-		
-		meter100();
 	}
 	
 	private void meter200()
 	{
 		while(meter200)
 		{
+			pause(5);
+			
+			turtleSpeed1 = rgen.nextInt(1, 9);
+	 		turtleSpeed2 = rgen.nextInt(1, 9);
+	 		turtleSpeed3 = rgen.nextInt(1, 9);
+	 		turtleSpeed4 = rgen.nextInt(1, 9);
+	 		turtleSpeed5 = rgen.nextInt(1, 9);
+	 		turtleSpeed6 = rgen.nextInt(1, 9);
+	 		turtleSpeed7 = rgen.nextInt(1, 9);
+	 		turtleSpeed8 = rgen.nextInt(1, 9);
 			
 			if (aTurtle.getX() >= 950)
 			{
-				aTurtle.setLocation(50, 150);
+				aTurtle.move(50, 150);
 				aLapCount += 1;
-				meter200();
+				
 			}
 			if (bTurtle.getX() >= 950)
 			{
-				bTurtle.setLocation(50, 250);
+				bTurtle.move(50, 250);
 				bLapCount += 1;
-				meter200();
+				
 			}
 			if (cTurtle.getX() >= 950)
 			{
-				cTurtle.setLocation(50, 350);
+				cTurtle.move(50, 350);
 				cLapCount += 1;
-				meter200();
+				
 			}
 			if (dTurtle.getX() >= 950)
 			{
-				dTurtle.setLocation(50, 450);
+				dTurtle.move(50, 450);
 				dLapCount += 1;
-				meter200();
+				
 			}
 			if (eTurtle.getX() >= 950)
 			{
-				eTurtle.setLocation(50, 550);
+				eTurtle.move(50, 550);
 				eLapCount += 1;
-				meter200();
+				
 			}
 			if (fTurtle.getX() >= 950)
 			{
-				fTurtle.setLocation(50, 650);
+				fTurtle.move(50, 650);
 				fLapCount += 1;
-				meter200();
 			}
 			if (gTurtle.getX() >= 950)
 			{
-				gTurtle.setLocation(50, 750);
+				gTurtle.move(50, 750);
 				gLapCount += 1;
-				meter200();
 			}
 			if (hTurtle.getX() >= 950)
 			{
-				hTurtle.setLocation(50, 850);
+				hTurtle.move(50, 850);
 				hLapCount += 1;
-				meter200();
 			}
-			
-			remove(Ascore);
-			remove(Bscore);
-			remove(Cscore);
-			remove(Dscore);
-			remove(Escore);
-			remove(Fscore);
-			remove(Gscore);
-			remove(Hscore);
-			add(Ascore);
-			add(Bscore);
-			add(Cscore);
-			add(Dscore);
-			add(Escore);
-			add(Fscore);
-			add(Gscore);
-			add(Hscore);
 			
 			if(aLapCount == 1 || bLapCount == 1 || cLapCount == 1 || dLapCount == 1 || eLapCount == 1 || fLapCount == 1 || gLapCount == 1 || hLapCount == 1)
 			{
 				add(finishLine);
 			}
 			
-			rand1 = Math.random()*100;
-			rand2 = Math.random()*100;
-			rand3 = Math.random()*100;
-			rand4 = Math.random()*100;
-			rand5 = Math.random()*100;
-			rand6 = Math.random()*100;
-			rand7 = Math.random()*100;
-			rand8 = Math.random()*100;
-			
-			aTurtle.setLocation(rand1, 0);
-			bTurtle.setLocation(rand2, 0);
-			cTurtle.setLocation(rand3, 0);
-			dTurtle.setLocation(rand4, 0);
-			eTurtle.setLocation(rand5, 0);
-			fTurtle.setLocation(rand6, 0);
-			gTurtle.setLocation(rand7, 0);
-			hTurtle.setLocation(rand8, 0);
-			
-			System.out.println("Red Ned:" + aTurtle.getX());
-			System.out.println("Baby Barf:" + bTurtle.getX());
-			System.out.println("Orange:" + cTurtle.getX());
-			System.out.println("Purple Nurple:" + dTurtle.getX());
-			System.out.println("Blue Sue:" + eTurtle.getX());
-			System.out.println("Sandy Randy:" + fTurtle.getX());
-			System.out.println("Mint Jun:" + gTurtle.getX());
-			System.out.println("Random:" + hTurtle.getX());
+			aTurtle.move(ts * turtleSpeed1, 0);
+			bTurtle.move(ts * turtleSpeed2, 0);
+			cTurtle.move(ts * turtleSpeed3, 0);
+			dTurtle.move(ts * turtleSpeed4, 0);
+			eTurtle.move(ts * turtleSpeed5, 0);
+			fTurtle.move(ts * turtleSpeed6, 0);
+			gTurtle.move(ts * turtleSpeed7, 0);
+			hTurtle.move(ts * turtleSpeed8, 0);
 			
 			if (aLapCount == 2)
 			{
@@ -2289,149 +2391,125 @@ public class TurtleGames extends GraphicsProgram
 	{
 		while(meter400)
 		{
+			pause(5);
+			
 			if (aTurtle.getX() >= 950)
 			{
 				aTurtle.setLocation(50, 150);
 				aLapCount += 1;
-				meter400();
+				
 			}
 			if (bTurtle.getX() >= 950)
 			{
 				bTurtle.setLocation(50, 250);
 				bLapCount += 1;
-				meter400();
+				
 			}
 			if (cTurtle.getX() >= 950)
 			{
 				cTurtle.setLocation(50, 350);
 				cLapCount += 1;
-				meter400();
+				
 			}
 			if (dTurtle.getX() >= 950)
 			{
 				dTurtle.setLocation(50, 450);
 				dLapCount += 1;
-				meter400();
+				
 			}
 			if (eTurtle.getX() >= 950)
 			{
 				eTurtle.setLocation(50, 550);
 				eLapCount += 1;
-				meter400();
+				
 			}
 			if (fTurtle.getX() >= 950)
 			{
 				fTurtle.setLocation(50, 650);
 				fLapCount += 1;
-				meter400();
+				
 			}
 			if (gTurtle.getX() >= 950)
 			{
 				gTurtle.setLocation(50, 750);
 				gLapCount += 1;
-				meter400();
+				
 			}
 			if (hTurtle.getX() >= 950)
 			{
 				hTurtle.setLocation(50, 850);
 				hLapCount += 1;
-				meter400();
+				
 			}
-			
-			remove(Ascore);
-			remove(Bscore);
-			remove(Cscore);
-			remove(Dscore);
-			remove(Escore);
-			remove(Fscore);
-			remove(Gscore);
-			remove(Hscore);
-			add(Ascore);
-			add(Bscore);
-			add(Cscore);
-			add(Dscore);
-			add(Escore);
-			add(Fscore);
-			add(Gscore);
-			add(Hscore);
-			
 			
 			if(aLapCount == 3 || bLapCount == 3 || cLapCount == 3 || dLapCount == 3 || eLapCount == 3 || fLapCount == 3 || gLapCount == 3 || hLapCount == 3)
 			{
 				add(finishLine);
 			}
 			
-			rand1 = Math.random()*100;
-			rand2 = Math.random()*100;
-			rand3 = Math.random()*100;
-			rand4 = Math.random()*100;
-			rand5 = Math.random()*100;
-			rand6 = Math.random()*100;
-			rand7 = Math.random()*100;
-			rand8 = Math.random()*100;
+			turtleSpeed1 = rgen.nextInt(1, 9);
+	 		turtleSpeed2 = rgen.nextInt(1, 9);
+	 		turtleSpeed3 = rgen.nextInt(1, 9);
+	 		turtleSpeed4 = rgen.nextInt(1, 9);
+	 		turtleSpeed5 = rgen.nextInt(1, 9);
+	 		turtleSpeed6 = rgen.nextInt(1, 9);
+	 		turtleSpeed7 = rgen.nextInt(1, 9);
+	 		turtleSpeed8 = rgen.nextInt(1, 9);
 			
-			aTurtle.setLocation(rand1, 0);
-			bTurtle.setLocation(rand2, 0);
-			cTurtle.setLocation(rand3, 0);
-			dTurtle.setLocation(rand4, 0);
-			eTurtle.setLocation(rand5, 0);
-			fTurtle.setLocation(rand6, 0);
-			gTurtle.setLocation(rand7, 0);
-			hTurtle.setLocation(rand8, 0);
+			aTurtle.move(ts * turtleSpeed1, 0);
+			bTurtle.move(ts * turtleSpeed2, 0);
+			cTurtle.move(ts * turtleSpeed3, 0);
+			dTurtle.move(ts * turtleSpeed4, 0);
+			eTurtle.move(ts * turtleSpeed5, 0);
+			fTurtle.move(ts * turtleSpeed6, 0);
+			gTurtle.move(ts * turtleSpeed7, 0);
+			hTurtle.move(ts * turtleSpeed8, 0);
 			
-			System.out.println("Red Ned:" + aTurtle.getX());
-			System.out.println("Baby Barf:" + bTurtle.getX());
-			System.out.println("Orange:" + cTurtle.getX());
-			System.out.println("Purple Nurple:" + dTurtle.getX());
-			System.out.println("Blue Sue:" + eTurtle.getX());
-			System.out.println("Sandy Randy:" + fTurtle.getX());
-			System.out.println("Mint Jun:" + gTurtle.getX());
-			System.out.println("Random:" + hTurtle.getX());
 			
-			if (aLapCount == 2)
+			if (aLapCount == 4)
 			{
 				aScore +=1;
 				resetrace();
 			}
 			
-			if (bLapCount == 2)
+			if (bLapCount == 4)
 			{
 				bScore +=1;
 				resetrace();
 			}
 			
-			if (cLapCount == 2)
+			if (cLapCount == 4)
 			{
 				cScore +=1;
 				resetrace();
 			}
 			
-			if (dLapCount == 2)
+			if (dLapCount == 4)
 			{
 				dScore +=1;
 				resetrace();
 			}
 			
-			if (eLapCount == 2)
+			if (eLapCount == 4)
 			{
 				
 				eScore +=1;
 				resetrace();
 			}
 			
-			if (fLapCount == 2)
+			if (fLapCount == 4)
 			{
 				fScore +=1;
 				resetrace();
 			}
 			
-			if (gLapCount == 2)
+			if (gLapCount == 4)
 			{
 				gScore +=1;
 				resetrace();
 			}
 			
-			if (hLapCount == 2)
+			if (hLapCount == 4)
 			{
 				hScore +=1;
 				resetrace();
@@ -2441,6 +2519,15 @@ public class TurtleGames extends GraphicsProgram
 	
 	private void resetrace()
 	{
+		ascore.setLabel("Red Ned's Lap Count =" + aScore);
+		bscore.setLabel("Baby Barf's Lap Count =" + bScore);
+		cscore.setLabel("Orange's Lap Count =" + cScore);
+		dscore.setLabel("Purple Nurple's Lap Count =" + dScore);
+		escore.setLabel("Blue Sue's Lap Count =" + eScore);
+		fscore.setLabel("Sandy Randy's Lap Count =" + fScore);
+		gscore.setLabel("Mint Jun's Lap Count =" + gScore);
+		hscore.setLabel("Random's Lap Count =" + hScore);
+		
 		removeAll();
 		addSelect();
 		add(ascore);
@@ -2460,12 +2547,12 @@ public class TurtleGames extends GraphicsProgram
 		while(searchX)
 		{
 			waitForClick();
-			if(select.getX() >= 75 && select.getX() <= 325)
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				warmUp();
 			}
-			if(select.getX() >= 375 && select.getX() <= 625)
+			if(select.getX() >= 375 && select.getX() <= 625 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				aScore = 0;
@@ -2478,7 +2565,7 @@ public class TurtleGames extends GraphicsProgram
 				hScore = 0;
 				turtlerace();
 			}
-			if(select.getX() >= 675 && select.getX() <= 925)
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				mainmenu();
 			}
@@ -2497,20 +2584,19 @@ public class TurtleGames extends GraphicsProgram
 		fScore = 0;
 		gScore = 0;
 		hScore = 0;
-		firstTime = true;
 		run();
 	}
 	
 	private void countdown()
 	{
-		countdown1 = new GLabel ("1", 500, 400);
-		countdown1.setFont(Font50);
+		countdown1 = new GLabel ("1", 440, 600);
+		countdown1.setFont(Font240);
 		
-		countdown2 = new GLabel ("2", 500, 400);
-		countdown2.setFont(Font50);
+		countdown2 = new GLabel ("2", 440, 600);
+		countdown2.setFont(Font240);
 		
-		countdown3 = new GLabel ("3", 500, 400);
-		countdown3.setFont(Font50);
+		countdown3 = new GLabel ("3", 440, 600);
+		countdown3.setFont(Font240);
 		
 		add(countdown3);
 		pause(1000);
@@ -2523,15 +2609,10 @@ public class TurtleGames extends GraphicsProgram
 		remove(countdown1);
 	}
 	
-	private void pause()
-	{
-		add(paused);
-		waitForClick();
-		countdown();
-	}
-	
 	private void addBackground()
 	{
+		setBackground(Lane2);
+		
 		stem = new GRect(475, -1000, 50, 2000);
 		stem.setFilled(true);
 		stem.setFillColor(Stem);
@@ -2576,12 +2657,13 @@ public class TurtleGames extends GraphicsProgram
 	
 	private void nextColor()
 	{
-		nextColor1 = rgen.nextInt(1, 10);
+		nextColor1 = rgen.nextInt(1, 9);
 		if(nextColor1 == 1)
 		{
+			redGen = true;
 			rekt1.setFillColor(o);
 			basket.setFillColor(o);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("RED");
@@ -2595,9 +2677,10 @@ public class TurtleGames extends GraphicsProgram
 		}
 		if(nextColor1 == 2)
 		{
+			orangeGen = true;
 			rekt1.setFillColor(Color.orange);
 			basket.setFillColor(Color.orange);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font20);
 				word.setLabel("ORANGE");
@@ -2612,9 +2695,10 @@ public class TurtleGames extends GraphicsProgram
 		}
 		if(nextColor1 == 3)
 		{
+			yellowGen = true;
 			rekt1.setFillColor(Color.yellow);
 			basket.setFillColor(Color.yellow);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("YELLOW");
@@ -2629,9 +2713,10 @@ public class TurtleGames extends GraphicsProgram
 		}
 		if(nextColor1 == 4)
 		{
+			greenGen = true;
 			rekt1.setFillColor(a);
 			basket.setFillColor(a);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("GREEN");
@@ -2646,9 +2731,10 @@ public class TurtleGames extends GraphicsProgram
 		}
 		if(nextColor1 == 5)
 		{
+			blueGen = true;
 			rekt1.setFillColor(h);
 			basket.setFillColor(h);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("BLUE");
@@ -2662,25 +2748,10 @@ public class TurtleGames extends GraphicsProgram
 		}
 		if(nextColor1 == 6)
 		{
-			rekt1.setFillColor(Indigo);
-			basket.setFillColor(Indigo);
-			if(level2 || level3)
-			{
-				word.setFont(Font25);
-				word.setLabel("INDIGO");
-				if(level3)
-				{
-					word.setColor(Indigo);
-					word.setFont(Font30);
-				}
-				add(word);
-			}
-		}
-		if(nextColor1 == 7)
-		{
+			purpleGen = true;
 			rekt1.setFillColor(Purple);
 			basket.setFillColor(Purple);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("PURPLE");
@@ -2692,11 +2763,12 @@ public class TurtleGames extends GraphicsProgram
 				add(word);
 			}
 		}
-		if(nextColor1 == 8)
+		if(nextColor1 == 7)
 		{
+			brownGen = true;
 			rekt1.setFillColor(Brown);
 			basket.setFillColor(Brown);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("BROWN");
@@ -2708,11 +2780,12 @@ public class TurtleGames extends GraphicsProgram
 				add(word);
 			}
 		}
-		if(nextColor1 == 9)
+		if(nextColor1 == 8)
 		{
+			pinkGen = true;
 			rekt1.setFillColor(Pink);
 			basket.setFillColor(Pink);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("PINK");
@@ -2724,11 +2797,12 @@ public class TurtleGames extends GraphicsProgram
 				add(word);
 			}
 		}
-		if(nextColor1 == 10)
+		if(nextColor1 == 9)
 		{
+			grayGen = true;
 			rekt1.setFillColor(Color.gray);
 			basket.setFillColor(Color.gray);
-			if(level2 || level3)
+			if(level2 || level3 || level4)
 			{
 				word.setFont(Font25);
 				word.setLabel("GRAY");
@@ -2739,6 +2813,13 @@ public class TurtleGames extends GraphicsProgram
 				}
 				add(word);
 			}
+		}
+		if(level4)
+		{
+			word.setFont(Font30);
+			word.setColor(Color.black);
+			black.setColor(Color.black);
+			white.setColor(Color.black);
 		}
 	}
 	
@@ -2754,12 +2835,13 @@ public class TurtleGames extends GraphicsProgram
 	public void mouseMoved(MouseEvent me)
 	{
 		int x = me.getX();
+		int y = me.getY();
 		
 		if(select != null)
 		{
 			if(x > selectWidth / 2 && x < getWidth() - selectWidth / 2)
 			{
-				select.setLocation(x - selectWidth / 2, getHeight() - selectYOffset);
+				select.setLocation(x - selectWidth / 2, y - selectWidth / 2);
 			}
 		}
 		
