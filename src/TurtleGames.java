@@ -1,6 +1,5 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.util.ArrayList;
 import java.awt.event.MouseEvent;
 import java.applet.Applet;
 import java.applet.AudioClip;
@@ -41,7 +40,7 @@ public class TurtleGames extends GraphicsProgram
 	/** Dimensions of the select */
 	private static final int selectWidth = 1;
 	private static final int selectHeight = 1;
-	
+	 
 	private static final int basketWidth = 150;
 	private static final int basketHeight = 150;
 	
@@ -253,8 +252,6 @@ public class TurtleGames extends GraphicsProgram
 	private GTurtle gTurtle;
 	private GTurtle hTurtle;
 	
-	
-	/** Troll Font */
 	Font Font10 = new Font("Comic Sans", Font.BOLD, 10);
 	Font Font15 = new Font("Comic Sans", Font.BOLD, 15);
 	Font Font18 = new Font("Comic Sans", Font.BOLD, 18);
@@ -318,6 +315,15 @@ public class TurtleGames extends GraphicsProgram
 	Color Lane8 = new Color(9,130,210);
 	
 	Color rnd = rgen.nextColor();
+	
+	private int cardRows = 4;
+	private int cardColumns = 5;
+	private int cardSep = 50;
+	private int cardYOffset = 50;
+	private int cardWidth = 140;
+	private int cardHeight = 180;
+	
+	private GRect card;
 	
 	public static void main(String[] args) 
 	{
@@ -2820,6 +2826,26 @@ public class TurtleGames extends GraphicsProgram
 			word.setColor(Color.black);
 			black.setColor(Color.black);
 			white.setColor(Color.black);
+		}
+	}
+	
+	private void addCards()
+	{
+		Color c = rgen.nextColor();
+		
+		for(int row = 0; row < cardRows;row++)
+		{
+			for(int col = 0; col < cardColumns;col++)
+			{
+				int x = cardSep + col*(cardWidth+cardSep);
+				int y = cardYOffset + row*(cardHeight + cardSep);
+				card = new GRect(x, y, cardWidth, cardHeight);
+				mrglitch = new GTurtle(x + ((cardWidth /2)), y + 90);
+				card.setFilled(true);
+				card.setColor(c);
+				add(card);
+				add(mrglitch);
+			}
 		}
 	}
 	
