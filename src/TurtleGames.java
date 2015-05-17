@@ -3,6 +3,7 @@ import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.applet.Applet;
 import java.applet.AudioClip;
+import java.util.Scanner;
 
 import acm.graphics.GLabel;
 import acm.graphics.GLine;
@@ -11,6 +12,10 @@ import acm.graphics.GTurtle;
 import acm.program.GraphicsProgram;
 import acm.util.RandomGenerator;
 
+/* This application was singly developed by Tairi Buchanan.
+ * If you make any edits or use extracts from this application,
+ * please site it.
+ */
 
 public class TurtleGames extends GraphicsProgram 
 {
@@ -82,6 +87,7 @@ public class TurtleGames extends GraphicsProgram
 	private GLabel tRace;
 	private GLabel trig;
 	private GLabel tGames;
+	private GLabel match;
 	private GLabel playAgain;
 	private GLabel mainMenu;
 	private GLabel next;
@@ -155,6 +161,13 @@ public class TurtleGames extends GraphicsProgram
 	private GLabel Meter200;
 	private GLabel Meter400;
 	
+	private GLabel tmatch;
+	private GLabel enterNames;
+	private GLabel player1;
+	private GLabel player2;
+	private GLabel turn;
+	private GLabel timeLabel;
+	
 	
 	private GLine opposite1;
 	private GLine opposite2;
@@ -176,6 +189,7 @@ public class TurtleGames extends GraphicsProgram
 	private GRect oButt;
 	private GRect aButt;
 	private GRect hButt;
+	private GRect game4Button;
 	private GRect turtleBase;
 	
 	private GRect rekt1;
@@ -201,12 +215,15 @@ public class TurtleGames extends GraphicsProgram
 	private GRect hRectangle;
 	private GRect finishLine;
 	
+	private GRect card;
+	
 	private boolean scoredPoint = false;
 	private final boolean numNotGen = true;
 	private final boolean searchX = true;
 	private boolean Practice = false;
+	private boolean mainmenu = false;
 	
-	private boolean toddlershowcase = true;
+	private boolean toddlershowcase = false;
 	private boolean level1 = false;
 	private boolean level2 = false;
 	private boolean level3 = false;
@@ -316,6 +333,9 @@ public class TurtleGames extends GraphicsProgram
 	
 	Color rnd = rgen.nextColor();
 	
+	private int p1Score = 0;
+	private int p2Score = 0;
+	
 	private int cardRows = 4;
 	private int cardColumns = 5;
 	private int cardSep = 50;
@@ -323,7 +343,12 @@ public class TurtleGames extends GraphicsProgram
 	private int cardWidth = 140;
 	private int cardHeight = 180;
 	
-	private GRect card;
+	public String P1;
+	public String P2;
+	private int randomName = rgen.nextInt(1, 9);
+	
+	Scanner user_input = new Scanner( System.in );
+	
 	
 	public static void main(String[] args) 
 	{
@@ -361,6 +386,10 @@ public class TurtleGames extends GraphicsProgram
 		tRace.setFont(Font35);
 		tRace.setColor(Color.white);
 		
+		match = new GLabel("Turtle Match", 83, 230);
+		match.setFont(Font35);
+		match.setColor(Color.black);
+		
 		playAgain = new GLabel("Play Again", 120, 850);
 		playAgain.setFont(Font35);
 		playAgain.setColor(Color.white);
@@ -385,6 +414,10 @@ public class TurtleGames extends GraphicsProgram
 		hButt.setFilled(true);
 		hButt.setFillColor(h);
 		
+		game4Button = new GRect(75,100,250,250);
+		game4Button.setFilled(true);
+		game4Button.setFillColor(Color.yellow);
+		
 		next = new GLabel("Next", 125, 850);
 		next.setFont(Font35);
 		next.setColor(Color.white);
@@ -398,9 +431,11 @@ public class TurtleGames extends GraphicsProgram
 		add(oButt);
 		add(aButt);
 		add(hButt);
+		add(game4Button);
 		add(trig);
 		add(drop);
 		add(tRace);
+		add(match);
 		while(searchX)
 		{
 			waitForClick();
@@ -415,10 +450,14 @@ public class TurtleGames extends GraphicsProgram
 				turtledrop();
 			}
 			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
-				if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
 			{
 				removeAll();
 				triggyturtle();
+			}
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 350 && select.getY() >= 100)
+			{
+				removeAll();
+				turtlematch();
 			}
 		}
 	}
@@ -675,7 +714,7 @@ public class TurtleGames extends GraphicsProgram
 		tdrop.setFont(Font35);
 		tdrop.setColor(Color.white);
 		
-		lapCount = new GLabel("Select Level", 400, 500);
+		lapCount = new GLabel("Select a Level", 400, 500);
 		lapCount.setFont(Font35);
 		lapCount.setColor(Color.white);
 		
@@ -1012,7 +1051,45 @@ public class TurtleGames extends GraphicsProgram
 			}	
 		}
 	}
-			
+	
+	private void turtlematch()
+	{
+		
+		tmatch = new GLabel("Welcome to Turtle Match", 350, 500);
+		tmatch.setFont(Font35);
+		tmatch.setColor(Color.white);
+		
+		play = new GLabel("Play", 150, 850);
+		play.setFont(Font35);
+		play.setColor(Color.white);
+		
+		mainMenu = new GLabel("Main Menu", 700, 850);
+		mainMenu.setFont(Font35);
+		mainMenu.setColor(Color.white);
+		
+		add(tmatch);
+		add(oButt);
+		add(hButt);
+		add(play);
+		add(mainMenu);
+		
+		while(searchX)
+		{
+			waitForClick();
+			if(select.getX() >= 75 && select.getX() <= 325 && select.getY() <= 950 && select.getY() >= 700)
+			{
+				removeAll();
+				names();
+			}	
+				
+			if(select.getX() >= 675 && select.getX() <= 925 && select.getY() <= 950 && select.getY() >= 700)
+			{
+				removeAll();
+				mainmenu();
+			}
+		}
+	}
+	
 	private void instructions()
 	{
 		add(obj);
@@ -2090,6 +2167,9 @@ public class TurtleGames extends GraphicsProgram
 		add(aButt);
 		add(hButt);
 		add(play);
+		
+		drop.setLabel("Select a Level");
+		
 		add(drop);
 		add(mainMenu);
 		
@@ -2829,6 +2909,42 @@ public class TurtleGames extends GraphicsProgram
 		}
 	}
 	
+	private void names()
+	{
+
+		setBackground(Color.white);
+		
+		enterNames = new GLabel("Please Enter P1 & P2 Names in Console" , 170, 500);
+		enterNames.setFont(Font35);
+		add(enterNames);
+		
+		System.out.print("Enter P1's Name: ");
+		P1 = user_input.next( );
+		
+		System.out.print("Enter P2's Name: ");
+		P2 = user_input.next( );
+		
+		removeAll();
+		player1 = new GLabel(P1 + "'s Score: " + p1Score, 50, 980);
+		player1.setFont(Font25);
+		add(player1);
+		
+		player2 = new GLabel(P2 + "'s Score: " + p2Score, 750, 980);
+		player2.setFont(Font25);
+		add(player2);
+		
+		timeLabel = new GLabel(P2 + "'s Score: " + p2Score, 750, 980);
+		timeLabel.setFont(Font25);
+		add(timeLabel);
+		
+		turn = new GLabel("", 350, 980);
+		turn.setFont(Font35);
+		add(turn);
+		
+		addSelect();
+		addCards();
+	}
+	
 	private void addCards()
 	{
 		Color c = rgen.nextColor();
@@ -2860,25 +2976,24 @@ public class TurtleGames extends GraphicsProgram
 	
 	public void mouseMoved(MouseEvent me)
 	{
-		int x = me.getX();
-		int y = me.getY();
-		
-		if(select != null)
-		{
-			if(x > selectWidth / 2 && x < getWidth() - selectWidth / 2)
+			int x = me.getX();
+			int y = me.getY();
+			
+			if(select != null)
 			{
-				select.setLocation(x - selectWidth / 2, y - selectWidth / 2);
+				if(x > selectWidth / 2 && x < getWidth() - selectWidth / 2)
+				{
+					select.setLocation(x - selectWidth / 2, y - selectWidth / 2);
+				}
 			}
-		}
-		
-		if(basket != null)
-		{
-			if(x > basketWidth / 2 && x < getWidth() - basketWidth / 2)
+			if(basket != null)
 			{
-				basket.setLocation(x - basketWidth / 2, 1000 - basketHeight - basketYOffset);
+				if(x > basketWidth / 2 && x < getWidth() - basketWidth / 2)
+				{
+					basket.setLocation(x - basketWidth / 2, 1000 - basketHeight - basketYOffset);
+				}
+				
 			}
-		}
-
 	}
 	
 }
